@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {characterCollection} from './characters.mjs';
+import {choreographyCSS} from './choreography.mjs';
 import {themes} from './themes.mjs';
 const dir=path.dirname(fileURLToPath(import.meta.url));
 const [input,output]=process.argv.slice(2);
@@ -11,6 +12,6 @@ if(typeof data.title!=='string'||!Array.isArray(data.questions)||!data.questions
 for(const q of data.questions)if(typeof q.question!=='string'||!Array.isArray(q.options)||q.options.length<2||!q.options.every(x=>typeof x==='string')||new Set(q.options).size!==q.options.length||!Number.isInteger(q.answer)||q.answer<0||q.answer>=q.options.length)throw Error('Invalid question');
 const safe=x=>JSON.stringify(x).replace(/</g,'\\u003c');
 let html=fs.readFileSync(path.join(dir,'template.html'),'utf8');
-for(const [key,value] of Object.entries({__QUIZ_DATA__:safe(data),__CHARACTERS__:safe(characterCollection()),__THEMES__:safe(themes),__CHARACTER_CSS__:fs.readFileSync(path.join(dir,'characters.css'),'utf8'),__CHARACTER_RUNTIME__:fs.readFileSync(path.join(dir,'characters-runtime.js'),'utf8')})) html=html.replace(key,()=>value);
+for(const [key,value] of Object.entries({__QUIZ_DATA__:safe(data),__CHARACTERS__:safe(characterCollection()),__THEMES__:safe(themes),__CHARACTER_CSS__:fs.readFileSync(path.join(dir,'characters.css'),'utf8')+choreographyCSS,__CHARACTER_RUNTIME__:fs.readFileSync(path.join(dir,'characters-runtime.js'),'utf8')})) html=html.replace(key,()=>value);
 if(/__(QUIZ_DATA|CHARACTERS|THEMES|CHARACTER_CSS|CHARACTER_RUNTIME)__/.test(html))throw Error('Unresolved placeholder');
 fs.writeFileSync(output,html);console.log('Created '+output+' with '+data.questions.length+' questions and '+characterCollection().length+' characters');

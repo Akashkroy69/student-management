@@ -26,3 +26,7 @@ The character appears beside the question, is smaller on narrow screens, and doe
 ## Verification
 
 Syntax, roster uniqueness, animation availability, non-repeating assignment, answer locking and refresh-state behaviour are checked. Full browser visual QA remains required before claiming production visual approval. Public Notion playback must be checked separately.
+
+## Distinct choreography upgrade
+
+Each of the 25 characters now has three original action scenes (75 total). `choreography.mjs` defines the props, character-specific limb movements and body paths. Examples include webs, rocket jets, shield throws, lightning, holograms, lasso spins, yarn, bamboo, books and circuit panels. Generic shared victory waves and question-mark overlays are disabled. Reactions loop with a resting beat. The gallery labels every action. Run `node --test class-quiz/v3/*.test.mjs` when the local runtime is available. Logic and structural checks passed; browser visual QA remains pending because the browser runtime cannot start.
